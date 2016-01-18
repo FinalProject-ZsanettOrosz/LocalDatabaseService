@@ -1,0 +1,115 @@
+package introsde.assignment.soap;
+
+import introsde.assignment.soap.model.AchivedGoal;
+import introsde.assignment.soap.model.CustomMeasureDefinition;
+import introsde.assignment.soap.model.Goal;
+import introsde.assignment.soap.model.HealthMeasureHistory;
+import introsde.assignment.soap.model.LifeStatus;
+import introsde.assignment.soap.model.MeasureDefinition;
+import introsde.assignment.soap.model.Person;
+
+import java.util.List;
+
+import javax.jws.WebMethod;
+import javax.jws.WebParam;
+import javax.jws.WebService;
+import javax.jws.WebResult;
+import javax.jws.soap.SOAPBinding;
+import javax.jws.soap.SOAPBinding.Style;
+import javax.jws.soap.SOAPBinding.Use;
+
+@WebService
+@SOAPBinding(style = Style.DOCUMENT, use = Use.LITERAL)
+// optional
+public interface People {
+
+	// goal list
+	@WebMethod(operationName = "readGoalList")
+	@WebResult(name = "goal")
+	public List<Goal> readGoalList();
+
+	// goal by id
+	@WebMethod(operationName = "readGoal")
+	@WebResult(name = "goal")
+	public Goal readGoal(@WebParam(name = "goalId") int id);
+
+	// achivements list
+	@WebMethod(operationName = "readAchivedGoalList")
+	@WebResult(name = "goal")
+	public List<AchivedGoal> readAchivedGoalList(
+			@WebParam(name = "personId") int personId);
+
+	// achivement by id
+	@WebMethod(operationName = "readAchivedGoal")
+	@WebResult(name = "achivedGoal")
+	public AchivedGoal readAchivedGoal(@WebParam(name = "idAchivement") int id);
+
+	// save achived goal
+	@WebMethod(operationName = "saveAchivedGoal")
+	@WebResult(name = "achivedGoal")
+	public Person saveAchivedGoal(@WebParam(name = "personId") int id,
+			@WebParam(name = "achivedGoal") AchivedGoal achivedGoal);
+
+	// M #1
+	@WebMethod(operationName = "readPersonList")
+	@WebResult(name = "person")
+	public List<Person> readPersonList();
+
+	// M #2
+	@WebMethod(operationName = "readPerson")
+	@WebResult(name = "person")
+	public Person readPerson(@WebParam(name = "personId") int id);
+
+	// M #3
+	@WebMethod(operationName = "updatePerson")
+	@WebResult(name = "person")
+	public Person updatePerson(@WebParam(name = "person") Person person);
+
+	// M #4
+	@WebMethod(operationName = "createPerson")
+	@WebResult(name = "person")
+	public Person createPerson(@WebParam(name = "person") Person person);
+
+	// M #5
+	@WebMethod(operationName = "deletePerson")
+	@WebResult(name = "personId")
+	public int deletePerson(@WebParam(name = "personId") int id);
+
+	// M #6
+	@WebMethod(operationName = "readPersonHisotry")
+	@WebResult(name = "history")
+	public List<HealthMeasureHistory> readPersonHistory(
+			@WebParam(name = "personId") int id,
+			@WebParam(name = "measureType") String measureType);
+
+	// M #7
+	@WebMethod(operationName = "readMeasureTypes")
+	@WebResult(name = "measureType")
+	public CustomMeasureDefinition readMeasureTypes();
+
+	// M #8
+	@WebMethod(operationName = "readPersonMeasure")
+	@WebResult(name = "measure")
+	public HealthMeasureHistory readPersonMeasure(
+			@WebParam(name = "personId") int id,
+			@WebParam(name = "measureType") String measureType,
+			@WebParam(name = "mid") int mid);
+
+	// M #9
+	@WebMethod(operationName = "savePersonMeasure")
+	@WebResult(name = "person")
+	public Person savePersonMeasure(@WebParam(name = "personId") int id,
+			@WebParam(name = "lifeStatus") LifeStatus lifestatus);
+
+	// M #10
+	@WebMethod(operationName = "updatePersonMeasure")
+	@WebResult(name = "history")
+	public HealthMeasureHistory updatePersonMeasure(
+			@WebParam(name = "personId") int id,
+			@WebParam(name = "history") HealthMeasureHistory history);
+
+	@WebMethod(operationName = "updatePersonHealthProfile")
+	@WebResult(name = "hpId")
+	public int updatePersonHP(@WebParam(name = "personId") int id,
+			@WebParam(name = "healthProfile") LifeStatus hp);
+}

@@ -109,7 +109,7 @@
 		</copy>
 	</target>
 	<target name="run" depends="install">
-		<echo message="app start introsde.rest.ehealth.App in ${build.dir}" />
+		<echo message="app start introsde.assignment.soap.endpoint.PeoplePublisher in ${build.dir}" />
 		<java classname="introsde.assignment.soap.endpoint.PeoplePublisher" classpath="${build.dir}" fork="true">
 			<arg value="$JAVA_OPTS  -cp" />
 			<classpath>

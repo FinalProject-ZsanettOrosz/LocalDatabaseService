@@ -69,9 +69,10 @@ public class HealthMeasureHistory implements Serializable {
 
 	public HealthMeasureHistory(LifeStatus ls) {
 		this.value = ls.getValue();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		timestamp = sdf.format(new Date());
-		System.err.println(timestamp);
+		//SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		//timestamp = sdf.format(new Date());
+		this.timestamp = ls.getTimestamp();
+		System.err.println("History:" + timestamp);
 
 		this.measureDefinition = ls.getMeasureDefinition();
 

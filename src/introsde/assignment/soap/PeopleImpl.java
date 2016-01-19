@@ -8,7 +8,11 @@ import introsde.assignment.soap.model.LifeStatus;
 import introsde.assignment.soap.model.MeasureDefinition;
 import introsde.assignment.soap.model.Person;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.jws.WebService;
@@ -109,6 +113,47 @@ public class PeopleImpl implements People {
 		if (p != null) {
 			System.out.println("---> Found Person by id = " + id + " => "
 					+ p.getName());
+
+			// fix life statuses
+
+			// when LS date is not today put it to history
+			List<LifeStatus> currentLSs = p.getLifeStatus();
+			for (int i = 0; i < currentLSs.size(); i++) {
+				System.out.println("LS date now:"
+						+ currentLSs.get(i).getTimestamp());
+				String LStime = currentLSs.get(i).getTimestamp();
+				if (LStime != null) {
+					Date today = new Date();
+					String strDate = LStime;
+					DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+					Date LSdate;
+					try {
+						LSdate = format.parse(strDate);
+
+						// ahould calculate it properly
+						if (today.getYear() == LSdate.getYear()
+								&& today.getMonth() == LSdate.getMonth()
+								&& today.getDay() > LSdate.getDay()) {
+							// save LS to history
+							LifeStatus old = currentLSs.get(i);
+							p.removeLifeStatus(old);
+							HealthMeasureHistory h = new HealthMeasureHistory(
+									old);
+							h.setPerson(p);
+							h.setTimestamp(old.getTimestamp());
+							p.addHistory(h);
+						
+							HealthMeasureHistory.saveHealthMeasureHistory(h);
+							Person.updatePerson(p);
+							LifeStatus.removeLifeStatus(old);
+						}
+					} catch (ParseException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+
 		} else {
 			System.out.println("---> Didn't find any Person with  id = " + id);
 		}
@@ -246,6 +291,8 @@ public class PeopleImpl implements People {
 		newLifeStatus.setMeasureDefinition(MeasureDefinition
 				.getByName(newLifeStatus.getMeasureDefinition()
 						.getMeasureName()));
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		newLifeStatus.setTimestamp(sdf.format(new Date()));
 		LifeStatus oldLifeStatus = person
 				.getLifeStatusByMeasureType(newLifeStatus
 						.getMeasureDefinition());

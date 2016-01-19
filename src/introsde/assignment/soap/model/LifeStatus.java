@@ -4,6 +4,8 @@ import introsde.assignment.soap.dao.LifeCoachDao;
 import introsde.assignment.soap.model.MeasureDefinition;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -52,6 +54,11 @@ public class LifeStatus implements Serializable {
 	@Column(name = "value")
 	private String value;
 	
+	@Column(name = "timestamp")
+	private String timestamp;
+	
+	
+
 	@OneToOne
 	@JoinColumn(name = "idMeasureDef", referencedColumnName = "idMeasureDef", insertable = true, updatable = true)
 	private MeasureDefinition measureDefinition;
@@ -67,12 +74,16 @@ public class LifeStatus implements Serializable {
 	public LifeStatus(MeasureDefinition def, String value){
 		this.measureDefinition = def;
 		this.value = value;
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		this.timestamp = sdf.format(new Date());
 	}
 	
 	public LifeStatus(Person person, MeasureDefinition def, String value){
 		this.person = person;
 		this.measureDefinition = def;
 		this.value = value;
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		this.timestamp = sdf.format(new Date());
 		
 	}
 	@XmlTransient
@@ -90,6 +101,14 @@ public class LifeStatus implements Serializable {
 
 	public void setValue(String value) {
 		this.value = value;
+	}
+	public String getTimestamp() {
+		return timestamp;
+	}
+
+
+	public void setTimestamp(String timestamp) {
+		this.timestamp = timestamp;
 	}
 
 	@XmlElement(name="measureType")

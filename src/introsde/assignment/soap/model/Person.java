@@ -43,11 +43,12 @@ public class Person implements Serializable {
 
 	@Column(name = "birthdate")
 	private String birthdate;
+	
 	@Column(name = "email")
 	private String email;
 
 	@XmlElementWrapper(name = "healthProfile")
-	@XmlElement(name = "lifeStatus")
+	@XmlElement(name = "lifeStatus") // should remove this but then have to rewrite every json thing in upper levels
 	@OneToMany(mappedBy = "person", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<LifeStatus> lifeStatus;
 
@@ -56,6 +57,8 @@ public class Person implements Serializable {
 		if (lifeStatus == null) {
 			return null;
 		}
+		
+		//if date is not from today save all the life statuses to history
 		return lifeStatus;
 	}
 
